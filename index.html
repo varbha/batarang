@@ -9,7 +9,15 @@
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <script type="text/javascript">
+    //<![CDATA[
+        $(window).on('load', function() { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(350).css({'overflow':'visible'});
+        })
+    //]]>
+    </script>
     <style>
     .navbar {
 		margin-bottom: 0;
@@ -83,6 +91,10 @@
     </style>
   </head>
   <body>
+    <div id="preloader">
+     <div id="status">&nbsp;</div>
+  </div>
+
     <!--navbar section-->
     <nav class="navs navbar navbar-default  navbar-fixed-top">
         <div class="container">
@@ -92,11 +104,11 @@
             <span class="icon-bar"></span>
 
             </button>
-            <a class="navbar-brand navbar-left" href="#"><span class="glyphicon glyphicon-indent-left"></span>{ Rethink_Collaborator }</a>
+            <a class="navbar-brand navbar-left"><span class="glyphicon glyphicon-indent-left"></span>{ Rethink_Collaborator }</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav navbar-left">
-                <li><a href="/home">route.home</a></li>
+                <li><a href="/">route.about</a></li>
                 <li><a href="/next">route.profile</a></li>
                 <li><a href="/rooms">route.rooms</a></li>
               </ul>
@@ -114,7 +126,7 @@
         <div class="col-sm-12" id="editor-wrapper">
         <span class="cuser">Current User: </span><span id="username"></span>
         <span class="room">Room: </span><span id="roomno"></span><br>
-      
+
         <textarea id="editor"></textarea>
       </div>
     </div>

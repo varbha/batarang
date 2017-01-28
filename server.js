@@ -69,6 +69,7 @@ var morgan = require('morgan');
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+
 // Setup Database
 r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
     if(err) throw err;
@@ -118,7 +119,10 @@ r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
 });
 
 // Serve HTML
-app.get('/', function(req, res) {
+app.get('/',function(req, res){
+  res.sendFile(__dirname + '/home.html');
+});
+app.get('/edit', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
