@@ -1,0 +1,26 @@
+{
+  "name": "collaborator",
+  "description": "A real-time, socket based code editor",
+  "main": "server.js",
+  "authors": [
+    "Varun Bhatia"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "real-time",
+    "sockets"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "codemirror": "^5.22.2"
+  }
+}

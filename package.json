@@ -1,0 +1,20 @@
+{
+  "name": "collaborator",
+  "version": "1.0.0",
+  "description": "A real-time, socket based code editor ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "real-time",
+    "sockets"
+  ],
+  "author": "Varun Bhatia",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^1.11.0",
+    "express" : "*"
+
+  }
+}
