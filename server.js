@@ -125,6 +125,9 @@ app.get('/',function(req, res){
 app.get('/edit', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/secret',function(req,res){
+  res.sendFile(__dirname+'/secret.html');
+});
 
 app.use('/bower_components', express.static('bower_components'));
 

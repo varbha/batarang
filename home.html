@@ -2,8 +2,9 @@
 <html>
   <head>
 
-    <title>About|Rethink Collaborator</title>
+    <title>Rethink | Real-time</title>
     <meta charset="utf-8">
+    <meta name="description" content="Get a code repository that helps you collaborate">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,6 +21,16 @@
 
 
     <style>
+    html, body {
+        height: 100%;
+        width: 100%;
+        background-color:#000033;
+        background: url("/mountains.jpg") no-repeat center;
+        background-size:cover
+
+        font-family: arial;
+    }
+
     .navbar {
 		margin-bottom: 0;
 		background-color: #b30000;
@@ -53,16 +64,28 @@
 		color: #fff !important;
 
 	}
+  #preloader {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#fff; /* change if the mask should have another color then white */
+    z-index:99; /* makes sure it stays on top */
+}
 
-      html, body {
-          height: 100%;
-          width: 100%;
-          background-color:#000033;
-          background: url("/mount.png") no-repeat center;
-          background-size:cover
+#status {
+    width:700px;
+    height:700px;
+    position:absolute;
+    left:50%; /* centers the loading animation horizontally one the screen */
+    top:50%; /* centers the loading animation vertically one the screen */
+    background-image:url('/status.gif'); /* path to your loading animation */
+    background-repeat:no-repeat;
+    background-position:center;
+    margin:-350px 0 0 -350px; /* is width and height divided by two */
+}
 
-          font-family: arial;
-      }
 
 
       #editor-wrapper {
@@ -102,8 +125,8 @@
         <div class="container">
             <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+
 
             </button>
             <a class="navbar-brand navbar-left" href="/"><span class="glyphicon glyphicon-indent-left"></span>{ Rethink_Collaborator }</a>
@@ -132,7 +155,7 @@
     </div>
   </div>
 
-  <footer style="color:#ffffff" class="foot bg-grey container-fluid text-center">
+  <footer style="color:#000000" class="foot bg-grey container-fluid text-center">
     <p> Made by Varun Bhatia <<Final Year Project>><br>
       <span  class="glyphicon glyphicon-indent-left"></span>Rethink Collaborator
 
