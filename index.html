@@ -58,7 +58,7 @@
     left:0;
     right:0;
     bottom:0;
-    background-color:#141414; /* change if the mask should have another color then white */
+      background-color:#141414; /* change if the mask should have another color then white */
     z-index:99; /* makes sure it stays on top */
 }
 
@@ -189,6 +189,12 @@
             mode: "python",
             theme: "bespin"
         });
+        console.log("length"+myCodeMirror.getValue.length);
+        if(myCodeMirror.getValue().length==0)
+        {
+        myCodeMirror.getDoc().setValue("#Welcome to Rethink Collaborator.\n#Here, you can edit and store your code within this room.\n#all changes will be stored and updated in real-time!");
+        console.log(myCodeMirror.getValue.length);
+        }
 
 
 
