@@ -97,14 +97,14 @@
       }
 
 
-      #username {
+      #username, #modeinfo {
           color: #f3f3f3;
       }
 
       .ouser, .roomno {
           color: #fff;
       }
-      .cuser, .room {
+      .cuser, .room, .modlang {
           color: #999;
       }
       #footer {
@@ -147,12 +147,17 @@
         <div class="row ">
         <div class="col-sm-12" id="editor-wrapper">
         <span class="cuser">Current User: </span><span id="username"></span>
-        <span class="room">Room: </span><span id="roomno"></span><br>
+        <span class="room">Room: </span><span id="roomno"></span>
+        <span class="modlang">Language:</span><span id="modeinfo"></span><br>
 
         <textarea id="editor"></textarea>
       </div>
     </div>
+    <br>
+    <p>Filename, mime, or mode name: <input style="color:#000000" type=text value=foo.js id=mode> <button style="color:#000000" type=button onclick="change()">change mode</button></p>
+
   </div>
+
 
   <footer style="color:#ffffff" class="foot bg-grey container-fluid text-center">
     <p> Made by Varun Bhatia <<Final Year Project>><br>
@@ -163,9 +168,13 @@
 
     <script src="/bower_components/codemirror/lib/codemirror.js"></script>
     <link rel="stylesheet" href="/bower_components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/bower_components/codemirror/addon/display/fullscreen.css">
     <link rel="stylesheet" href="/bower_components/codemirror/theme/bespin.css">
-    <script src="/bower_components/codemirror/mode/javascript/javascript.js"></script>
-    <script src="/bower_components/codemirror/mode/python/python.js"></script>
+    <script src="/bower_components/codemirror/addon/mode/loadmode.js"></script>
+    <script src="/bower_components/codemirror/mode/meta.js"></script>
+    <script src="/bower_components/codemirror/addon/display/fullscreen.js"></script>
+
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
@@ -181,14 +190,59 @@
         }
         var room = getParameterByName('room');
         var user = getParameterByName('user');
+
         document.getElementById("username").innerHTML = user;
         document.getElementById("roomno").innerHTML =room;
 
+
+        CodeMirror.modeURL = "/bower_components/codemirror/mode/%N/%N.js";
+
+
         var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
             lineNumbers: true,
-            mode: "python",
-            theme: "bespin"
+            theme: "bespin",
+            extraKeys: {
+        "F11": function(cm) {
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
+      }
         });
+        var modeInput = document.getElementById("mode");
+        CodeMirror.on(modeInput, "keypress", function(e) {
+          if (e.keyCode == 13) change();
+        });
+
+
+        function change() {
+          var val = modeInput.value, m, mode, spec;
+          if (m = /.+\.([^.]+)$/.exec(val)) {
+            var info = CodeMirror.findModeByExtension(m[1]);
+            if (info) {
+              mode = info.mode;
+              spec = info.mime;
+            }
+          } else if (/\//.test(val)) {
+            var info = CodeMirror.findModeByMIME(val);
+            if (info) {
+              mode = info.mode;
+              spec = val;
+            }
+          } else {
+            mode = spec = val;
+          }
+          if (mode) {
+            console.log(mode);
+            console.log(spec);
+            myCodeMirror.setOption("mode", spec);
+            CodeMirror.autoLoadMode(myCodeMirror, mode);
+            document.getElementById("modeinfo").textContent = spec;
+          } else {
+            alert("Could not find a mode corresponding to " + val);
+          }
+        }
         console.log("length"+myCodeMirror.getValue.length);
         if(myCodeMirror.getValue().length==0)
         {
