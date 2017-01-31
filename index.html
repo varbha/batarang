@@ -154,7 +154,7 @@
       </div>
     </div>
     <br>
-    <p>Filename, mime, or mode name: <input style="color:#000000" type=text value=foo.js id=mode> <button style="color:#000000" type=button onclick="change()">change mode</button></p>
+    <p>Enter the mode name: <input style="color:#000000" type=text value=someFileName.py id=mode> <button class="btn btn-sm btn-success" style="color:#000000" type=button onclick="change()">change mode</button></p>
 
   </div>
 
@@ -234,8 +234,7 @@
             mode = spec = val;
           }
           if (mode) {
-            console.log(mode);
-            console.log(spec);
+
             myCodeMirror.setOption("mode", spec);
             CodeMirror.autoLoadMode(myCodeMirror, mode);
             document.getElementById("modeinfo").textContent = spec;
@@ -246,7 +245,9 @@
         console.log("length"+myCodeMirror.getValue.length);
         if(myCodeMirror.getValue().length==0)
         {
-        myCodeMirror.getDoc().setValue("#Welcome to Rethink Collaborator.\n#Here, you can edit and store your code within this room.\n#all changes will be stored and updated in real-time!");
+        myCodeMirror.getDoc()
+        .setValue
+("#Welcome to Rethink Collaborator.\n#Here, you can edit and store your code within this room.\n#All changes will be stored and updated in real-time!\n#Press F11 to enter full screen mode, ESC to exit.\n#Change the language of this code by using the field below the editor.");
         console.log(myCodeMirror.getValue.length);
         }
 
