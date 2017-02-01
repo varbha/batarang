@@ -120,7 +120,7 @@ r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
 
 // Serve HTML
 app.get('/',function(req, res){
-  res.sendFile(__dirname + '/home.html');
+  res.sendFile(__dirname + '/home-page.html');
 });
 app.get('/edit', function(req, res) {
   res.sendFile(__dirname + '/index.html');
