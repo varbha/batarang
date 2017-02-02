@@ -65,7 +65,9 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var morgan = require('morgan');
+var compression= require('compression');
 
+app.use(compression());
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
