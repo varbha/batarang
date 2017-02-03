@@ -131,6 +131,15 @@ app.get('/secret',function(req,res){
   res.sendFile(__dirname+'/secret.html');
 });
 
+app.get('/register',function(req,res){
+  res.sendFile(__dirname+'/register.html');
+});
+
+app.get('/signin',function(req,res){
+  res.sendFile(__dirname+'/signin.html');
+});
+
+
 app.use('/bower_components', express.static('bower_components'));
 
 // Setup Express Listener

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <title>{ Rethink Collaborator }</title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body style="background-image:url('/material-wallpaper-8.jpg')">
+
+  <nav style="background-image:url('/material-wallpaper-8.jpg')" role="navigation">
+    <div class="nav-wrapper container">
+      <ul class="left hide-on-med-and-down">
+      <li><a href="http://rethinkcollab.localtunnel.me" class="waves-effect waves-light btn"> HOME <i class="material-icons left">fast_rewind</i></a></li>
+      <a id="logo-container" href="http://rethinkcollab.localtunnel.me/register" style="color:grey" class="brand-logo center">SIGN IN</a>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li class="grey-text light">  create an account <a href="http://rethinkcollab.localtunnel.me/register" class="waves-effect waves-light btn">SIGN UP<i class="material-icons right">contacts</i></a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a class="waves-effect waves-light btn">HOME <i class="material-icons left">fast_rewind</i></a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="container">
+      <div class="section "><br>
+        <div class="valign-wrapper " style="flex: 1;">
+
+          <div class="container valign" style="background:#f7f7f7; padding: 32px 48px 0px 48px;max-width: 500px;">
+            <ul class="center"><li><i class="material-icons large center">perm_identity</i></li></ul>
+            <form method="post" accept-charset="utf-8" class="col s12" action="/signup">
+              <div style="display:none;">
+                <input type="hidden" name="_method" value="POST" />
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" class="validate" required="required" maxlength="255" id="username" /> </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" required="required" id="password" /> </div>
+              </div>
+
+
+              <div class="row">
+                <div class="input-field col s4">
+                </div>
+                <div class="input-field col s4">
+                  <button class="large btn waves-effect waves-light center" type="submit">SIGN IN<i class="material-icons right">send</i></button>
+                </div>
+                <div class="input-field col s4">
+                </div>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+</html>
