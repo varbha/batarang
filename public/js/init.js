@@ -5,13 +5,11 @@
     $('.parallax').parallax();
     $('.modal').modal();
     $('.terms').click(function(){
-	  $('button.cont').removeClass('disabled');	
-	  $('button.cont').addClass('enabled');	
+	  $('button.cont').removeClass('disabled').addClass('enabled');	
       $('span.me').removeAttr("hidden");
-	  $('i.dechanged').removeClass('red-text');
+	  $('i.dechanged').removeClass('red-text').addClass('green-text').html('done');
       $('p.changed').css("color","green");
-	  $('i.dechanged').addClass('green-text');
-	  $('i.dechanged').html('done');
+	  
     });
 	$('.noterms').click(function(){
 		$('button.cont').removeClass('enabled');

@@ -116,6 +116,13 @@
       #footer {
       color: #000000;
       }
+	  textarea, iframe {
+    			border: 2px solid #ddd;
+    			height: 500px;
+    			width: 100%;	
+				color:#000000;
+				background-color:white;
+			}
     </style>
   </head>
   <body>
@@ -193,13 +200,39 @@
       </p>
     </div>
   </div>
-
-
+  <div class="row" id="only-html" style="display:none">
+  <table width="100%" border="0" cellspacing="5" cellpadding="5">
+            <tr>
+                <td width="50%" scope="col">&nbsp;</td>
+                <td width="50%" align="left" scope="col">
+                    <input onclick="runCode();" type="button" value="Run Code">
+                </td>
+            </tr>
+            <tr>
+                <td> 
+                    <form>
+                        <strong>Code</strong>
+                        <textarea name="sourceCode" id="sourceCode">
+<html>
+<head>
+<title>Hello</title>
+</head>
+<body>
+<h1>Hello!</h1>
+<p>Write HTML, CSS or JavaScript code here and click 'Run Code'.</p>
+</body>
+</html>
+                        </textarea>
+                    </form>
+                </td>
+                <td><strong>Output</strong><iframe name="targetCode" id="targetCode"></iframe></td>
+            </tr>
+        </table>  
 </div>
 
 
   <footer style="color:#ffffff" class="foot bg-grey container-fluid text-center">
-    <p> Made by Varun Bhatia <<Final Year Project>><br>
+    <p> Made by Varun Bhatia &lt;&lt;Final Year Project&gt;&gt;<br>
       <span  class="glyphicon glyphicon-indent-left"></span>Rethink Collaborator
 
     </p>
@@ -217,6 +250,19 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
+	
+	function runCode()
+            {
+                var content = document.getElementById('sourceCode').value;
+                var iframe = document.getElementById('targetCode');
+                iframe = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
+                iframe.document.open();
+                iframe.document.write(content);
+                iframe.document.close();
+                return false;
+            }
+            runCode();
+			
 
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
@@ -277,6 +323,11 @@
             myCodeMirror.setOption("mode", spec);
             CodeMirror.autoLoadMode(myCodeMirror, mode);
             document.getElementById("modeinfo").textContent = spec;
+			if(mode=='htmlmixed'){
+			alert("The tryit editor has been added to the page");
+			document.getElementById("only-html").style.display="block";
+			
+			}
           } else {
             alert("Could not find a mode corresponding to " + val);
           }
