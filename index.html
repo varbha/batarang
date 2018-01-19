@@ -119,12 +119,14 @@
 	  textarea, iframe {
     			border: 2px solid #ddd;
     			height: 500px;
-    			width: 100%;	
+    			width: 100%;
 				color:#000000;
 				background-color:white;
 			}
     </style>
   </head>
+
+
   <body>
     <div id="preloader">
     <div id="status">&nbsp;</div>
@@ -200,6 +202,9 @@
       </p>
     </div>
   </div>
+  <br>
+  <button class ="btn-sm" onclick="compile()">Compile</button>
+  <textarea id="compilearea" rows="5" cols="5" style="height:100px">Compiled result here</textarea>
   <div class="row" id="only-html" style="display:none">
   <table width="100%" border="0" cellspacing="5" cellpadding="5">
             <tr>
@@ -209,7 +214,7 @@
                 </td>
             </tr>
             <tr>
-                <td> 
+                <td>
                     <form>
                         <strong>Code</strong>
                         <textarea name="sourceCode" id="sourceCode">
@@ -227,7 +232,7 @@
                 </td>
                 <td><strong>Output</strong><iframe name="targetCode" id="targetCode"></iframe></td>
             </tr>
-        </table>  
+        </table>
 </div>
 
 
@@ -250,7 +255,21 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
-	
+      function compile(){
+        $.ajax({
+          url:'/compile',
+          type:'post',
+          data: myCodeMirror.getValue(),
+          success: function(result, status, xhr){
+            //$(#compilearea).text(result);
+            document.getElementById("compilearea").innerHTML = result
+            console.log(result);
+            console.log(myCodeMirror.getValue())
+
+          }
+        })
+      }
+
 	function runCode()
             {
                 var content = document.getElementById('sourceCode').value;
@@ -262,7 +281,7 @@
                 return false;
             }
             runCode();
-			
+
 
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
@@ -326,7 +345,7 @@
 			if(mode=='htmlmixed'){
 			alert("The tryit editor has been added to the page");
 			document.getElementById("only-html").style.display="block";
-			
+
 			}
           } else {
             alert("Could not find a mode corresponding to " + val);
@@ -364,11 +383,15 @@
 
         socket.on('doc', function(msg){
             if(msg.new_val.id === room && msg.new_val.user != user) {
-                var current_pos = myCodeMirror.getCursor();
+                //var current_pos = myCodeMirror.getCursor();
+                console.log(msg.new_val.value)
                 myCodeMirror.getDoc().setValue(msg.new_val.value);
-                myCodeMirror.setCursor(current_pos);
+                //myCodeMirror.setCursor(current_pos);
             }
         });
+
+
+
 
     </script>
   </body>

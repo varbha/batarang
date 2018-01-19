@@ -13,9 +13,17 @@
   "author": "Varun Bhatia",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.6",
     "express": "*",
     "express-device": "^0.4.2",
-    "nodemon": "^1.11.0"
+    "express-session": "^1.15.1",
+    "method-override": "^2.3.7",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }
