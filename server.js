@@ -195,7 +195,7 @@ app.post('/testCreateRoom', function(req,res){
                 if(err) console.log(err);
                 else{
                   console.log("NEW ROOMNO: "+ req.body.room + " ADDED TO ROOMS");
-                  res.json({sucess:true,reply:"DONE"});
+                  res.json({success:true,reply:"DONE",roomNo:req.body.room});
                   return;
                 }
               });
@@ -215,9 +215,57 @@ app.post('/testCreateRoom', function(req,res){
         return;
       }
     }).catch(error =>{
-      console.log("DB ERROR IN FINDINF EXISTING ROOM");
+      console.log("DB ERROR IN FINDING EXISTING ROOM");
     });
 });
+
+// JOIN ROOM LOGIC
+app.post('/testJoinRoom' , (req,res)=>{
+  console.log("---------------------------------------------");
+  console.log("REQUEST TO JOIN ROOM:"+req.body.room);
+  Room.findOne({
+    roomNo: req.body.room
+  }).then(roomFound =>{
+    if(!roomFound)
+    {
+      console.log("---------------------------------------------");
+      console.log("REQUESTED ROOM TO JOIN DOES NOT EXIST");
+      res.json({success:false, reply:"INVALID ROOM"});
+      return;
+    }
+    else
+    {
+      console.log("---------------------------------------------");
+      console.log("VALID ROOM REQUESTED");
+      User.findOneAndUpdate({
+        user : req.body.username
+      },
+      {
+        $push:{rooms:req.body.room}
+      }).then(userUpdated=>{
+        if(!userUpdated)
+        {
+          console.log("---------------------------------------------");
+          console.log("USER COULD NOT BE FOUND");
+          console.log("USER NAME PASSED: " + req.body.username);
+        }
+        else
+        {
+          console.log("---------------------------------------------");
+          console.log("USER: "+req.body.username + " ROOMS ARRAY UPDATED WITH ROOMNO: " + req.body.room);
+          res.json({success:true, reply:"UPDATED", room:req.body.room});
+          return;
+        }
+      }).catch(error =>{
+        console.log("DB ERROR WHILE FETCHING AND UPDATING USER");
+      });
+      }
+    }).catch(error => {
+      console.log("DB ERROR IN FINDING ROOM TO JOIN");
+    });
+  });
+
+
 
 // SIGNUP AND REGISTERATION LOGIC
 app.post('/signup',(req,res) => {
