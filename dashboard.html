@@ -6,20 +6,81 @@
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<body>
-    <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
-    <textarea rows="15" cols="50">USER DATA COMES HERE</textarea>
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script>
-        function sendData(){
+
+        $.ajax({
+            url: 'http://localhost:9000/user',
+            type: 'POST',
+            data:{
+                "url": window.location.href
+            },
+            dataType:'json',
+            success: function(data){
+                document.getElementById("details").innerHTML = JSON.stringify(data[0]);
+                console.log(data[0]);
+            },
+            async:true
+
+        });
+
+        var refreshOnChange = function(){
+
             $.ajax({
-                url:'/user',
-                type: 'post',
-                data: 'xx'
-            });
+            url: 'http://localhost:9000/user',
+            type: 'POST',
+            data:{
+                "url": window.location.href
+            },
+            dataType:'json',
+            success: function(data){
+                document.getElementById("details").innerHTML = JSON.stringify(data[0]);
+                console.log(data[0]);
+            },
+            async:true
+        });
         }
     </script>
 
+<body>
+    <div>
+        <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
+        <textarea id="details" rows="15" cols="50">USER DATA COMES HERE</textarea>
+    </div>
+    <div>
+        <textarea placeholder="Enter the room number" maxlength="2" id="roomNumber" cols="30" rows="1"></textarea>
+        <button id="createRoom" onclick="createRoom()">Create Room</button>
+    </div>
+
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        function createRoom(){
+            var room = document.getElementById("roomNumber").value;
+            var url = window.location.href;
+            //console.log(room);
+            //console.log(url);
+            if(room!=""){
+            $.ajax({
+                url:'http://localhost:9000/testCreateRoom',
+                type:'POST',
+                data:{
+                    "url":url,
+                    "room":room
+                },
+                dataType:"json",
+                success: function(data){
+                    console.log(data);
+                    alert(data['reply']);
+                    document.getElementById("roomNumber").value = '';
+                    refreshOnChange();
+
+
+                }
+            });
+        }
+        else{
+            alert("INPUT A VALUE");
+        }
+        }
+    </script>
 </body>
 </html>

@@ -34,6 +34,7 @@ app.use(compression());
 app.use(morgan('dev'));
 app.use(device.capture());
 app.use(express.static('public'));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -45,26 +46,30 @@ var userSchema = new Schema({
   user: { type: String, required: true, unique: true},
   emailid: String,
   password: { type:String, required:true},
-  rooms: [String]
+  rooms: [String],
+  commit1 : String,
+  commit2 : String,
+  commit3 :  String
 });
 // Creating the user model (collection: users)
 var User = mongoose.model('User', userSchema);
+//------------------------------------------------------------------------------------------------
 
 var roomSchema = new Schema({
-  rooms : [String]
+  roomNo : { type: String, required:true, unique:true}
 });
 // Creating room model (for keeping track of active rooms)
 var Room = mongoose.model('Room', roomSchema);
-
-var dummyRoom = new Room({
+//-------------------------------------------------------------------------------------------------
+/*var dummyRoom = new Room({
   rooms : []
-});
-dummyRoom.save(function(err){
+});*/
+/*dummyRoom.save(function(err){
   if(err)console.log(err);
   else{
     console.log("DUMMY ROOM CREATED");
   }
-});
+});*/
 //----------------------------------------------------------------------------------------------
 
 // Setup RethinkDB Database
@@ -136,56 +141,85 @@ app.get('/dashboard', function(req,res){
   console.log("USER NAME:" + name + "\nDASHBOARD DISPLAYED");
   console.log("---------------------------------------------");
 });
+
 // FOR GETTING DETAILS OF A PARTICULAR USER
-app.get('/user', function(req,res){
-  var u = req.url;
+app.post('/user', function(req,res){
+  var u = req.body.url;
   var  i = u.indexOf('=');
   var user_name = u.substr(i+1);
   console.log("---------------------------------------------");
   console.log("RECIEVED /USER AJAX GET REQUEST FOR USER:" + user_name);
   console.log("RETRIEVING FROM MONGODB");
+  User.find({user:user_name},'rooms emailid user', function(err, result){
+    if(err) console.log(err);
+    else if (result) res.send(result);
+    else if (!result) res.redirect('/');
+  });
   console.log("---------------------------------------------");
 });
-// HOMEPAGE
-app.get('/',function(req, res){
-	if(req.device.type==='phone'){
-    console.log("---------------------------------------------");
-		console.log("phone");
-    console.log("---------------------------------------------");
-    // MOBILE HOME PAGE
-		res.sendFile(__dirname + '/mobile-home.html');
-	}
-	else{
-    console.log("---------------------------------------------");
-		console.log("desktop");
-    console.log("---------------------------------------------");
-    // DESKTOP HOME PAGE
-		res.sendFile(__dirname + '/home-page.html');
-	}
 
-}); //app.get('/') ends
-//----------------------------------------------
+// CREATE ROOM (NEW LOGIC)
+app.post('/testCreateRoom', function(req,res){
 
-// CODE PAGE
-app.get('/edit', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
+  Room.findOne({
+    roomNo : req.body.room
+  }).then(roomResult => {
+    if(!roomResult){
+      console.log("-------------------------------------------");
+      console.log("COULD NOT FIND EXISTING ROOM WITH ROOMNO: "+ req.body.room);
+      console.log("EXTRACTING USERNAME");
+      var u = req.body.url;
+      var  i = u.indexOf('=');
+      var user_name = u.substr(i+1);
+      User.findOne({
+        user:user_name
+      }).then(userResult =>{
+        if(!userResult){
+          res.json({sucess:false, reply:"USER NOT EXIST"});
+          return;
+        }
+        else {
+          User.findOneAndUpdate({
+            user:user_name
+          },
+          {
+            $push: {rooms: req.body.room}
+          }).then(updatedUser => {
+            if(updatedUser!=null){
+              console.log("---------------------------------------------");
+              console.log("ADDED NEW ROOM: "+req.body.room+" TO USER: "+ user_name);
+              var newRoom = new Room({
+                roomNo : req.body.room
+              });
+              newRoom.save(function(err){
+                if(err) console.log(err);
+                else{
+                  console.log("NEW ROOMNO: "+ req.body.room + " ADDED TO ROOMS");
+                  res.json({sucess:true,reply:"DONE"});
+                  return;
+                }
+              });
+            }
+          }).catch(error =>{
+            console.log("DB ERROR IN USER-FIND ONE AND UPDATE");
+          });
+        }
+        }).catch(error =>{
+          console.log("DB ERROR IN CHECKING USER EXISTENCE");
+        });
+      }
+      else {
+        console.log("-------------------------------------------");
+        console.log("ALEADY HAVE EXISTING ROOM WITH ROOMNO: "+ req.body.room);
+        res.json({sucess:false, reply:"EXISTING ROOM"});
+        return;
+      }
+    }).catch(error =>{
+      console.log("DB ERROR IN FINDINF EXISTING ROOM");
+    });
 });
-//----------------------------------------------
 
-// REGISTERATION PAGE
-app.get('/register',function(req,res){
-  res.sendFile(__dirname+'/register.html');
-});
-//---------------------------------------------
-
-// SIGNIN PAGE
-app.get('/signin',function(req,res){
-  res.sendFile(__dirname+'/signin.html');
-});
-//----------------------------------------------
-
-
-// POST SIGNUP PAGE
+// SIGNUP AND REGISTERATION LOGIC
 app.post('/signup',(req,res) => {
   console.log("---------------------------------------------");
   console.log("ENTERING USER DETAILS IN MONGODB");
@@ -193,7 +227,10 @@ app.post('/signup',(req,res) => {
     user: req.body.username,
     emailid : req.body.email,
     password: req.body.password,
-    rooms : []
+    rooms : [],
+    commit1 : null,
+    commit2 : null,
+    commit3 : null
   });
 
   newUser.save(function(err){
@@ -209,6 +246,7 @@ app.post('/signup',(req,res) => {
 });
 //----------------------------------------------
 
+// SIGN IN LOGIC
 app.post('/signinCheck', function(req,res){
 
   console.log(req.body);
@@ -232,28 +270,6 @@ app.post('/signinCheck', function(req,res){
   });
 });
 
-// CREATE ROOM
-app.post('/createRoom', function(req,res){
-  console.log(req.body.url);
-  console.log(req.body);
-  var room = req.body.room;
-  console.log(room);
-  var u = req.body.url;
-  var  i = u.indexOf('=');
-  var user_name = u.substr(i+1);
-  console.log(user_name);
-  User.findOneAndUpdate({user: user_name}, {$push: {rooms: room}} /*{user:"varunn"}*/, function(err,user){
-    if(err) console.log(err);
-    else console.log(user);
-  });
-  /*User.count({user:"varunbhatia"}, function(err,count){
-    if(err) console.log(err);
-    else { console.log("COUNT"+count);}
-  });
-*/  //Room.update({},{$push:{rooms:room}});
-  console.log('done');
-  res.send('done');
-  });
 
 
 // COMPILATION
@@ -265,6 +281,46 @@ app.post('/compile', function(req,res){
   res.send("thanks for code")
 });
 //----------------------------------------------
+
+// HOMEPAGE
+app.get('/',function(req, res){
+  if(req.device.type==='phone'){
+    console.log("---------------------------------------------");
+    console.log("phone");
+    console.log("---------------------------------------------");
+    // MOBILE HOME PAGE
+    res.sendFile(__dirname + '/mobile-home.html');
+  }
+  else{
+    console.log("---------------------------------------------");
+    console.log("desktop");
+    console.log("---------------------------------------------");
+    // DESKTOP HOME PAGE
+    res.sendFile(__dirname + '/home-page.html');
+  }
+
+}); //app.get('/') ends
+//----------------------------------------------
+
+// CODE EDITING PAGE
+app.get('/edit', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+//----------------------------------------------
+
+// REGISTERATION PAGE
+app.get('/register',function(req,res){
+  res.sendFile(__dirname+'/register.html');
+});
+//---------------------------------------------
+
+// SIGNIN PAGE
+app.get('/signin',function(req,res){
+  res.sendFile(__dirname+'/signin.html');
+});
+//----------------------------------------------
+
+
 
 /*
 *****************************
