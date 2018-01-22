@@ -56,7 +56,10 @@ var User = mongoose.model('User', userSchema);
 //------------------------------------------------------------------------------------------------
 
 var roomSchema = new Schema({
-  roomNo : { type: String, required:true, unique:true}
+  roomNo : { type: String, required:true, unique:true},
+  title : String,
+  lastModifiedBy : String,
+  roomDesc : String
 });
 // Creating room model (for keeping track of active rooms)
 var Room = mongoose.model('Room', roomSchema);
@@ -99,6 +102,22 @@ r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
       // socket emits even 'document-update' from client, this method handles it
       socket.on('document-update', function(msg){
         console.log(msg);
+        // TEST CODE FOR LAST EDIT BY:
+        Room.findOneAndUpdate({
+          roomNo: msg.id
+        },
+        {
+          lastModifiedBy : msg.user
+        }).then (modifiedRoom => {
+          if (!modifiedRoom) {
+            console.log("CANT FIND ROOM TO UPDATE");
+          }
+          else {
+            console.log("ROOM LASTMODIFIEDBY VALUE UPDATED WITH USER " + msg.user);
+          }
+        }).catch (error => {
+          console.log("DB ERROR IN UPDATING LAST MODIFIED BY VALUE");
+        });
         // insert data into the table (conflict:update is for new entries)
         r.table('edit').insert({id: msg.id,value: msg.value, user: msg.user}, {conflict: "update"}).run(conn, function(err, res){
           if (err) throw err;
@@ -189,7 +208,9 @@ app.post('/testCreateRoom', function(req,res){
               console.log("---------------------------------------------");
               console.log("ADDED NEW ROOM: "+req.body.room+" TO USER: "+ user_name);
               var newRoom = new Room({
-                roomNo : req.body.room
+                roomNo : req.body.room,
+                lastModifiedBy : '',
+                roomDesc:''
               });
               newRoom.save(function(err){
                 if(err) console.log(err);
@@ -386,6 +407,12 @@ app.post('/query/', function (req,res){
 	console.log(req.body);
   console.log("---------------------------------------------");
 	res.send("thanks for the query");
+});
+
+app.post('/getRooms', (req,res) => {
+  Room.find({}).then(returnedData => {
+    res.json(returnedData);
+  });
 });
 
 
