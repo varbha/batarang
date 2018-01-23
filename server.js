@@ -287,6 +287,64 @@ app.post('/testJoinRoom' , (req,res)=>{
   });
 
 
+// EXIT ROOM LOGIC
+app.post('/exitRoom', (req,res)=>{
+  User.findOneAndUpdate({
+    user: req.body.user
+  },
+  {
+    $pull : {rooms : req.body.roomNo}
+  }).then(result => {
+    if(result) {
+      console.log("REMOVED ROOM NO: "+ req.body.roomNo + " FROM USER: " + req.body.user);
+      res.json({sucess:true, reply:"DONE"});
+      // now check is anyone else is a part of the room
+      User.find({
+        rooms : req.body.roomNo
+      }).then(isThereAnyUser =>{
+        console.log(isThereAnyUser.length);
+        if(isThereAnyUser.length == 0){
+
+          Room.findOne({
+            roomNo: req.body.roomNo
+          }).then(returnedRooms =>{
+            console.log(returnedRooms);
+
+          if(returnedRooms){
+            console.log("ROOM NO: " + req.body.roomNo +"NEEDS TO BE DELETED");
+            Room.remove({
+              roomNo: req.body.roomNo
+            }).then(deletedRoom => {
+              console.log(deletedRoom);
+              if(deletedRoom){
+              console.log("ROOM HAS BEEN DELETED");
+              r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
+                if(err) throw err;
+                r.table('edit').filter({id: req.body.roomNo}).delete().run(conn, function(err, res){
+                  console.log("Yipee yay MF");
+                }).catch(err =>{
+                      console.log("HH");
+                });
+              });
+
+            }
+            else{
+              console.log("ROOM COULD NOT BE DELETED");
+            }
+          });
+          }
+        });
+        }
+        else {
+          console.log("THERE ARE OTHER USERS WITH THIS ROOM: " + req.body.roomNo);
+          console.log(r);
+        }
+      });
+
+  }
+});
+});
+
 
 // SIGNUP AND REGISTERATION LOGIC
 app.post('/signup',(req,res) => {
