@@ -59,15 +59,26 @@ app.use('/bower_components', express.static('bower_components'));
 http.listen(9000, '0.0.0.0', function(){
   console.log('listening on: 0.0.0.0:9000');
 });*/
+
 var r = require('rethinkdb');
 var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var morgan = require('morgan');
+var compression= require('compression');
+var device = require('express-device');
+var bodyParser= require('body-parser');
 
+
+app.use(compression());
 app.use(morgan('dev'));
+app.use(device.capture());
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
 
 
 // Setup Database
@@ -120,7 +131,15 @@ r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
 
 // Serve HTML
 app.get('/',function(req, res){
-  res.sendFile(__dirname + '/home.html');
+	if(req.device.type==='phone'){
+		console.log("phone");
+		res.sendFile(__dirname + '/mobile-home.html');
+	}
+	else{
+		console.log("desktop");
+		res.sendFile(__dirname + '/home-page.html');	
+	}
+  
 });
 app.get('/edit', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -128,6 +147,27 @@ app.get('/edit', function(req, res) {
 app.get('/secret',function(req,res){
   res.sendFile(__dirname+'/secret.html');
 });
+
+app.get('/register',function(req,res){
+  res.sendFile(__dirname+'/register.html');
+});
+
+app.get('/signin',function(req,res){
+  res.sendFile(__dirname+'/signin.html');
+});
+
+app.post('/signup',function(req,res){
+	console.log(req.body);
+	if(req.device.type==='phone'){
+		console.log("phone");
+		res.redirect('/');
+	}
+	else{
+		console.log("desktop");
+		res.redirect('/');
+	}
+});
+
 
 app.use('/bower_components', express.static('bower_components'));
 

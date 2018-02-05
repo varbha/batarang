@@ -13,8 +13,9 @@
   "author": "Varun Bhatia",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "^1.11.0",
-    "express" : "*"
-
+    "body-parser": "^1.16.1",
+    "express": "*",
+    "express-device": "^0.4.2",
+    "nodemon": "^1.11.0"
   }
 }

@@ -1,0 +1,102 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Rethink Collaborator</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+        
+        <link rel="icon" href="/curly-bracket.png" type="image/x-icon">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Roboto Mono' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Dosis:500&text=Vue.js' rel='stylesheet' type='text/css'>
+
+        <!-- main page styles -->
+		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link rel="stylesheet" href="/css/index.css">
+
+    
+        
+
+        
+        
+    </head>
+    <body style="background-image:url('/material-wallpaper-8.jpg')">        
+	<div id="mobile-bar" class="top">
+            <a class="menu-button"></a>
+            <a class="logo" href="curly-bracket.png"></a>
+        </div>
+        <div id="header">
+  <a id="logo" href="/material-wallpaper-8.jpg">
+    <img src="/material-wallpaper-8.jpg">
+    <span>Rethink Collaborator</span>
+  </a>	
+</div>
+
+
+<div id="hero">
+  <div class="inner">
+    <div class="left">
+      <i class="hero-logo material-icons large purple-text text-darken-4" style="font-size:150px">polymer</i>
+    </div><div class="right">
+      <h2 class="vue">Rethink Collaborator</h2>
+      <h1>
+        Real-time Coding Collaborator<hr>Python, JavaScript, HTML, CSS and more.
+      </h1>
+      <p>
+        <a class="button" style="background-color:purple;color:white;" id="goto" href="/register">SIGN UP</a>
+        <a class="button white" href="/signin">SIGN IN</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="highlights">
+  <div class="inner">
+    <div class="point">
+      <h2  class="purple-text text-darken-4">Real-time</h2>
+      <p>Get real-time, and leverage the definitive power of sockets. See your code updated instantly across members, no matter where you are.</p>
+    </div>
+
+    <div class="point">
+      <h2 class="purple-text text-darken-4">Collaborative</h2>
+      <p>Code-Collaboration has never been easier. Use rooms to create distinct projects and develop modern, fresh and innovative code, all in real-time</p>
+    </div>
+
+    <div class="point">
+      <h2  class="purple-text text-darken-4">Code-focused</h2>
+      <p>
+        Rethink is code-first, and committed to it. Choose from a wide vareity of coding languages, with an editor feature-packed to make your online coding experience hassle-free2
+      </p>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="footer">
+  
+  Varun Bhatia
+</div>
+
+<script>
+var topScrolled = false
+window.addEventListener('scroll', function () {
+  if (window.pageYOffset > 165 && !topScrolled) {
+    topScrolled = true
+    document.getElementById('mobile-bar').classList.remove('top')
+  } else if (window.pageYOffset <= 165 && topScrolled) {
+    topScrolled = false
+    document.getElementById('mobile-bar').classList.add('top')
+  }
+})
+</script>
+
+        
+
+       
+        
+    </body>
+</html>
