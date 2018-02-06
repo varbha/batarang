@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<head>
+    <title>DASHBOARD PAGE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+
+        $.ajax({
+            url: 'http://localhost:9000/user',
+            type: 'POST',
+            data:{
+                "url": window.location.href
+            },
+            dataType:'json',
+            success: function(data){
+                //document.getElementById("details").innerHTML = JSON.stringify(data[0]);
+                //console.log(data[0]);
+                $.ajax({
+                    url:'/getRooms',
+                    type:'post',
+                    success: function(rdata){
+                        document.getElementById("username").innerHTML = JSON.stringify(data[0]['user']);
+                        document.getElementById("mail").innerHTML = JSON.stringify(data[0]['emailid']);
+                        var u = (window.location.href).indexOf('=');
+                        var username = (window.location.href).substr(u+1);
+                        console.log(data[0]['rooms'].length);
+
+                        for(var i =0;i<data[0]['rooms'].length;i++){
+                            var l = document.createElement("li");
+                            var a = document.createElement("a");
+                            var ulist = document.getElementById("roomList");
+                            a.textContent = ("Room "+ data[0]['rooms'][i]);
+                            var dynamicLink='http://localhost:9000/edit/?user='+username+'&room='+data[0]['rooms'][i];
+
+                            a.setAttribute('href', dynamicLink);
+                            l.appendChild(a);
+                            ulist.appendChild(l);
+
+
+                        for(var k =0;k< rdata.length;k++){
+                            console.log("RDATA: " +rdata[k]['roomNo']);
+                            console.log("DATA0: "+data[0]['rooms'][i]);
+                            console.log(rdata[k]['roomNo'] == data[0]['rooms'][i]);
+                            if (rdata[k]['roomNo'] == data[0]['rooms'][i]){
+                                console.log("ENTERED IF");
+                                var l2 = document.createElement("li");
+                                var a2 = document.createElement("a");
+                                var ulist = document.getElementById("roomList");
+                                console.log("DATA IN IF FOR K= " + k +" IS "+ rdata[k]['lastModifiedBy']);
+                                a2.textContent = ("Last Modified by: "+ rdata[k]['lastModifiedBy']);
+                                l2.appendChild(a2);
+                                ulist.appendChild(l2);
+                            }
+                        }
+
+                    }
+                }
+                });
+
+            },
+            async:true
+
+        });
+
+        var refreshOnChange = function(){
+
+            $.ajax({
+            url: 'http://localhost:9000/user',
+            type: 'POST',
+            data:{
+                "url": window.location.href
+            },
+            dataType:'json',
+            success: function(data){
+                //document.getElementById("details").innerHTML = JSON.stringify(data[0]);
+                //console.log(data[0]);
+                $.ajax({
+                    url:'/getRooms',
+                    type:'post',
+                    success: function(rdata){
+                        document.getElementById("username").innerHTML = JSON.stringify(data[0]['user']);
+                        document.getElementById("mail").innerHTML = JSON.stringify(data[0]['emailid']);
+                        var u = (window.location.href).indexOf('=');
+                        var username = (window.location.href).substr(u+1);
+                        $("#roomList").empty();
+                        console.log(data[0]['rooms'].length);
+
+                        for(var i =0;i<data[0]['rooms'].length;i++){
+                            var l = document.createElement("li");
+                            var a = document.createElement("a");
+                            var ulist = document.getElementById("roomList");
+                            a.textContent = ("Room "+ data[0]['rooms'][i]);
+                            var dynamicLink='http://localhost:9000/edit/?user='+username+'&room='+data[0]['rooms'][i];
+
+                            a.setAttribute('href', dynamicLink);
+                            l.appendChild(a);
+                            ulist.appendChild(l);
+
+
+                        for(var k =0;k< rdata.length;k++){
+                            console.log("RDATA: " +rdata[k]['roomNo']);
+                            console.log("DATA0: "+data[0]['rooms'][i]);
+                            console.log(rdata[k]['roomNo'] == data[0]['rooms'][i]);
+                            if (rdata[k]['roomNo'] == data[0]['rooms'][i]){
+                                console.log("ENTERED IF");
+                                var l2 = document.createElement("li");
+                                var a2 = document.createElement("a");
+                                var ulist = document.getElementById("roomList");
+                                console.log("DATA IN IF FOR K= " + k +" IS "+ rdata[k]['lastModifiedBy']);
+                                a2.textContent = ("Last Modified by: "+ rdata[k]['lastModifiedBy']);
+                                l2.appendChild(a2);
+                                ulist.appendChild(l2);
+                            }
+                        }
+
+                    }
+                }
+                });
+
+            },
+            async:true
+
+        });
+
+        }
+    </script>
+
+
+<body>
+    <div style = "width: 100%; overflow:hidden" >
+        <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
+        <div style="width: 30%; float: left;">
+            <h1 id = "prof">Profile</h1>
+            <p id ="username"></p>
+            <p id = "mail"></p>
+        </div>
+        <div style="width:70%;float:right">
+        <h1 id="userdetails">Room Details</h1>
+
+         <ul id="roomList"></ul>
+
+        <textarea placeholder="Enter the room number" maxlength="2" id="roomNumber" cols="30" rows="1"></textarea>
+        <br>
+        <button id="createRoom" onclick="createRoom()">Create Room</button>
+        <br><br>
+        <textarea placeholder="Enter the room number" maxlength="2" id="joiningRoom" cols="30" rows="1"></textarea><br>
+        <button id="joinRoom" onclick="joinRoom()">Join Room</button>
+    </div>
+    </div>
+
+
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        function createRoom(){
+            var room = document.getElementById("roomNumber").value;
+            var url = window.location.href;
+
+            if(room!=""){
+            $.ajax({
+                url:'http://localhost:9000/testCreateRoom',
+                type:'POST',
+                data:{
+                    "url":url,
+                    "room":room
+                },
+                dataType:"json",
+                success: function(data){
+                    console.log(data);
+                    alert(data['reply']);
+                    document.getElementById("roomNumber").value = '';
+                    refreshOnChange();
+
+
+                }
+            });
+        }
+        else{
+            alert("INPUT A VALUE");
+        }
+        }
+
+        function joinRoom(){
+            var reqRoom = document.getElementById("joiningRoom").value;
+            //VERY IMP: FIRST CHECK IF ALREADY PART OF ROOM
+            let flag = true;
+             $.ajax({
+            url: 'http://localhost:9000/user',
+            type: 'POST',
+            data:{
+                "url": window.location.href
+            },
+            dataType:'json',
+            success: function(data){
+                for(let i =0;i< data[0]['rooms'].length;i++){
+                    if (reqRoom == data[0]['rooms'][i]){
+                        flag =false;
+                        alert("YOU GOT THIS ROOM");
+                        document.getElementById("joiningRoom").value = '';
+                        break;
+                    }
+                }
+
+            if(flag){
+            var url = window.location.href;
+            var name = url.indexOf('=');
+            var n = url.substr(name+1);
+
+            $.ajax({
+                url:'testJoinRoom',
+                type:'POST',
+                data:{
+                    'room': reqRoom,
+                    'username' : n
+                },
+                dataType:'json',
+                success: (data) =>{
+                console.log(data);
+                if(data['reply']=="UPDATED"){
+                    alert("JOIN SUCCESSFUL");
+                    document.getElementById("joiningRoom").value = '';
+                    refreshOnChange();
+                }
+                else {
+                    alert("INVALID! CANNOT JOIN");
+                    document.getElementById("joiningRoom").value ='';
+                }
+            }
+            });
+        }
+        }
+    });
+         }
+    </script>
+</body>
+</html>

@@ -8,6 +8,11 @@ p {
   line-height: 2rem;
 }
 
+h1.logo{
+	
+	height=300px;
+}
+
 #preloader {
   position:fixed;
   top:0;
