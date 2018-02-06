@@ -1,7 +1,6 @@
 # batarang
-module for real-time coding collaborator components<br>
+<hr>
+platform for real-time coding collaboration<br>
 <ul>
 <li>uses socket.io and node.js</li>
 </ul>
-<em>branch->master for initial build</em><br>
-<em>branch->multiplemodes for current build</em> <b>(do not merge with master)
