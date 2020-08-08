@@ -15,7 +15,7 @@
 */
 
 // DEPENDENCIES
-var r = require('rethinkdb');
+//var r = require('rethinkdb');
 var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
