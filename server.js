@@ -24,7 +24,7 @@ var morgan = require('morgan');
 var compression= require('compression');
 var device = require('express-device');
 var bodyParser= require('body-parser');
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 //mongoose.connect('mongodb://localhost/userdb');
 
 var host = process.env.IP || '0.0.0.0';
