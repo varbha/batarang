@@ -25,7 +25,10 @@ var compression= require('compression');
 var device = require('express-device');
 var bodyParser= require('body-parser');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/userdb');
+//mongoose.connect('mongodb://localhost/userdb');
+
+var host = process.env.IP || '0.0.0.0';
+var port = process.env.PORT || 8080;
 
 
 
@@ -40,7 +43,7 @@ app.use(bodyParser.urlencoded({
 }));
 //---------------------------------------------------------------------------------------------
 // Setup MongoDB connection
-var Schema = mongoose.Schema;
+/*var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
   user: { type: String, required: true, unique: true},
@@ -60,9 +63,9 @@ var roomSchema = new Schema({
   title : String,
   lastModifiedBy : String,
   roomDesc : String
-});
+});*/
 // Creating room model (for keeping track of active rooms)
-var Room = mongoose.model('Room', roomSchema);
+//var Room = mongoose.model('Room', roomSchema);
 //-------------------------------------------------------------------------------------------------
 /*var dummyRoom = new Room({
   rooms : []
@@ -78,6 +81,7 @@ var Room = mongoose.model('Room', roomSchema);
 // Setup RethinkDB Database
 // ALL OPERATIONS REQUIRING RETHINKDB TO BE ADDED IN THIS BLOCK
 //-----------------------------------------------------------------------------------------------
+/*
 r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
     if(err) throw err;
     r.db('test').tableList().run(conn, function(err, response){
@@ -149,7 +153,7 @@ r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
 
 }); // rethinkdb block ends (cant access rethinkdb outside this block)
 //-----------------------------------------------------------------------------------------------------
-
+*/
 
 // HTML static pages
 // DASHBOARD
@@ -176,7 +180,7 @@ app.post('/user', function(req,res){
   });
   console.log("---------------------------------------------");
 });
-
+/*
 // CREATE ROOM (NEW LOGIC)
 app.post('/testCreateRoom', function(req,res){
 
@@ -408,7 +412,7 @@ app.post('/compile', function(req,res){
   res.send("thanks for code")
 });
 //----------------------------------------------
-
+*/
 // HOMEPAGE
 app.get('/',function(req, res){
   if(req.device.type==='phone'){
@@ -428,7 +432,7 @@ app.get('/',function(req, res){
 
 }); //app.get('/') ends
 //----------------------------------------------
-
+/*
 // CODE EDITING PAGE
 app.get('/edit', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -446,7 +450,7 @@ app.get('/signin',function(req,res){
   res.sendFile(__dirname+'/signin.html');
 });
 //----------------------------------------------
-
+*/
 
 
 /*
@@ -477,6 +481,6 @@ app.post('/getRooms', (req,res) => {
 app.use('/bower_components', express.static('bower_components'));
 
 // Setup Express Listener
-http.listen(9000 , '0.0.0.0', function(){
-  console.log('listening on: 0.0.0.0:9000');
+http.listen(port , host, function(){
+  console.log('listening on:' +  host + '+' + port);
 });
